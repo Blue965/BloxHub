@@ -1,0 +1,17 @@
+# Rust / Tauri
+/target/
+src-tauri/target/
+src-tauri/gen/
+**/*.rs.bk
+
+# Données du serveur de chat
+bloxhub-chat-data/
+history.json
+
+# Système
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/

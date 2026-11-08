@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "BloxHub",
+  "version": "0.1.0",
+  "identifier": "app.bloxhub.desktop",
+  "build": {
+    "frontendDist": "../ui"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "BloxHub",
+        "width": 1320,
+        "height": 860,
+        "minWidth": 1080,
+        "minHeight": 680,
+        "theme": "Dark",
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "SocialNetworking",
+    "windows": {
+      "nsis": {
+        "languages": ["French", "English"],
+        "displayLanguageSelector": false
+      }
+    },
+    "shortDescription": "Communauté & FastFlags pour Roblox",
+    "longDescription": "BloxHub : chat communautaire façon Discord, éditeur de FastFlags, lanceur intégré et profils Roblox. Application communautaire non officielle.",
+    "copyright": "Projet communautaire — non affilié à Roblox Corporation",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

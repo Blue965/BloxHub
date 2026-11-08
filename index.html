@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BloxHub — Chat, FastFlags & Lanceur pour Roblox</title>
+<meta name="description" content="BloxHub : chat communautaire façon Discord, éditeur de FastFlags, lanceur intégré et profils Roblox. Télécharge l'installateur Windows (.exe) ou la version portable.">
+<style>
+  :root{
+    --bg:#0d0d0f; --bg2:#141417; --card:#1a1a1e; --card2:#202025;
+    --border:#2a2a30; --text:#f5f5f7; --muted:#9d9da6;
+    --red:#e2231a; --red-dark:#b31a13; --red-glow:rgba(226,35,26,.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.6;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---------- Header ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(13,13,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;letter-spacing:.3px}
+  .logo{width:30px;height:30px;flex:none}
+  .nav-links{display:flex;gap:26px;font-size:.92rem;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  .lang-btn{background:var(--card2);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:.85rem;cursor:pointer;font-weight:700}
+  .lang-btn:hover{color:var(--text);border-color:var(--red)}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;padding:90px 0 70px;text-align:center;background:
+    radial-gradient(600px 320px at 50% -60px, rgba(226,35,26,.22), transparent 70%),
+    radial-gradient(900px 500px at 85% 110%, rgba(226,35,26,.08), transparent 60%)}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(226,35,26,.12);border:1px solid rgba(226,35,26,.4);color:#ff6b62;font-size:.8rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:999px}
+  .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red-glow);animation:pulse 2s infinite}
+  @keyframes pulse{50%{opacity:.4}}
+  h1{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900;letter-spacing:-1px;margin:22px 0 14px;line-height:1.08}
+  h1 .accent{color:var(--red);text-shadow:0 0 30px var(--red-glow)}
+  .tagline{color:var(--muted);font-size:1.13rem;max-width:640px;margin:0 auto 38px}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:1.02rem;padding:14px 30px;border-radius:12px;transition:.18s;letter-spacing:.2px}
+  .btn svg{width:20px;height:20px;flex:none}
+  .btn-primary{background:var(--red);color:#fff;box-shadow:0 8px 26px var(--red-glow)}
+  .btn-primary:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 12px 32px var(--red-glow)}
+  .btn-ghost{background:var(--card);border:1px solid var(--border);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--red);transform:translateY(-2px)}
+  .meta-note{margin-top:14px;color:var(--muted);font-size:.85rem}
+  .meta-note b{color:var(--text)}
+
+  /* ---------- Sections ---------- */
+  section{padding:64px 0}
+  .sec-title{font-size:1.9rem;font-weight:900;letter-spacing:-.5px;text-align:center;margin-bottom:8px}
+  .sec-sub{text-align:center;color:var(--muted);margin-bottom:42px;font-size:1.02rem}
+
+  /* Downloads cards */
+  .dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+  .dl-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px;transition:.18s;position:relative}
+  .dl-card:hover{border-color:var(--red);transform:translateY(-3px)}
+  .dl-card.reco{border-color:rgba(226,35,26,.55)}
+  .dl-tag{position:absolute;top:-12px;right:18px;background:var(--red);color:#fff;font-size:.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:999px}
+  .dl-card h3{font-size:1.15rem;font-weight:800}
+  .dl-card p{color:var(--muted);font-size:.92rem;flex:1}
+  .dl-size{display:inline-block;font-size:.78rem;color:var(--muted);background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:2px 8px}
+  .dl-card .btn{justify-content:center;padding:12px 20px}
+
+  /* Features */
+  .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .feat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;transition:.18s}
+  .feat:hover{border-color:var(--red);transform:translateY(-2px)}
+  .feat .ic{width:44px;height:44px;border-radius:11px;background:rgba(226,35,26,.13);border:1px solid rgba(226,35,26,.35);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .feat .ic svg{width:22px;height:22px;color:var(--red)}
+  .feat h3{font-size:1.05rem;font-weight:800;margin-bottom:6px}
+  .feat p{color:var(--muted);font-size:.92rem}
+
+  /* Steps */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;counter-reset:step}
+  .step{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;counter-increment:step}
+  .step::before{content:counter(step);position:absolute;top:-14px;left:20px;width:34px;height:34px;border-radius:10px;background:var(--red);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px var(--red-glow)}
+  .step h3{font-size:1rem;font-weight:800;margin:12px 0 6px}
+  .step p{color:var(--muted);font-size:.9rem}
+  .warn{margin-top:34px;background:rgba(226,35,26,.07);border:1px solid rgba(226,35,26,.35);border-radius:14px;padding:20px 24px;display:flex;gap:14px;align-items:flex-start}
+  .warn svg{width:22px;height:22px;color:var(--red);flex:none;margin-top:2px}
+  .warn p{font-size:.93rem;color:#d8d8de}
+  .warn b{color:#fff}
+
+  /* Server */
+  .server-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px;display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+  @media(max-width:760px){.server-box{grid-template-columns:1fr}}
+  .server-box h3{font-size:1.3rem;font-weight:900;margin-bottom:10px}
+  .server-box p{color:var(--muted);font-size:.95rem;margin-bottom:8px}
+  pre{background:#0a0a0c;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-family:"Cascadia Code",Consolas,monospace;font-size:.9rem;color:#e8e8ec;overflow-x:auto}
+  pre .c{color:#6f6f78}
+  pre .r{color:#ff6b62}
+
+  /* Footer */
+  footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font-size:.86rem;text-align:center}
+  footer a{color:#ff6b62}
+  footer .row{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <svg class="logo" viewBox="0 0 64 64"><rect x="14" y="14" width="36" height="36" rx="8" transform="rotate(-8 32 32)" fill="#e2231a"/><rect x="26" y="26" width="12" height="12" rx="3" transform="rotate(-8 32 32)" fill="#0d0d0f"/></svg>
+      BloxHub
+    </a>
+    <nav class="nav-links">
+      <a href="#telecharger" data-i18n="nav_dl">Télécharger</a>
+      <a href="#fonctionnalites" data-i18n="nav_feat">Fonctionnalités</a>
+      <a href="#installation" data-i18n="nav_install">Installation</a>
+      <a href="#serveur" data-i18n="nav_server">Serveur</a>
+    </nav>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="wrap">
+    <span class="badge"><span class="dot"></span><span data-i18n="badge">v0.1.0 — Windows 64 bits</span></span>
+    <h1>Blox<span class="accent">Hub</span></h1>
+    <p class="tagline" data-i18n="tagline">Le « Discord pour Roblox » : chat communautaire avec tes amis, éditeur de FastFlags, lanceur intégré et profils Roblox — tout dans une seule application.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="downloads/BloxHub_0.1.0_x64-setup.exe" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5"/><path d="M4 19h16"/></svg>
+        <span data-i18n="cta_setup">Télécharger l'installateur (.exe)</span>
+      </a>
+      <a class="btn btn-ghost" href="downloads/bloxhub-windows-v0.1.0.zip" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"/><path d="M3 8l2.5-4h13L21 8"/><path d="M10 12h4"/></svg>
+        <span data-i18n="cta_portable">Version portable (.zip)</span>
+      </a>
+    </div>
+    <p class="meta-note"><span data-i18n="meta_note">Installateur 3 Mo · Portable 7,4 Mo · Windows 10/11 · <b>Gratuit et open source (MIT)</b></span></p>
+  </div>
+</div>
+
+<section id="telecharger">
+  <div class="wrap">
+    <h2 class="sec-title" data-i18n="dl_title">Téléchargements</h2>
+    <p class="sec-sub" data-i18n="dl_sub">Choisis la version qui te convient — tout est inclus, rien à configurer.</p>
+    <div class="dl-grid">
+      <div class="dl-card reco">
+        <span class="dl-tag" data-i18n="tag_reco">Recommandé</span>
+        <h3 data-i18n="dl1_title">Installateur Windows</h3>
+        <p data-i18n="dl1_desc">L'assistant classique : installe BloxHub dans ton profil utilisateur, crée les raccourcis menu Démarrer et Bureau. Aucun mot de passe administrateur requis.</p>
+        <div><span class="dl-size">BloxHub_0.1.0_x64-setup.exe</span> <span class="dl-size">~3 Mo</span></div>
+        <a class="btn btn-primary" href="downloads/BloxHub_0.1.0_x64-setup.exe" download><span data-i18n="dl1_btn">Installer</span></a>
+      </div>
+      <div class="dl-card">
+        <h3 data-i18n="dl2_title">Version portable</h3>
+        <p data-i18n="dl2_desc">Aucune installation : dézippe, double-clique sur bloxhub.exe. Idéal sur clé USB. Contient aussi le serveur de chat bloxhub-server.exe.</p>
+        <div><span class="dl-size">bloxhub-windows-v0.1.0.zip</span> <span class="dl-size">~7,4 Mo</span></div>
+        <a class="btn btn-ghost" href="downloads/bloxhub-windows-v0.1.0.zip" download><span data-i18n="dl2_btn">Télécharger le .zip</span></a>
+      </div>
+      <div class="dl-card">
+        <h3 data-i18n="dl3_title">Code source</h3>
+        <p data-i18n="dl3_desc">Le projet complet en Rust (Tauri 2) : le core, le serveur WebSocket, l'interface FR/EN et le README détaillé pour compiler toi-même.</p>
+        <div><span class="dl-size">Rust · Tauri 2 · MIT</span></div>
+        <a class="btn btn-ghost" href="https://github.com/Blue965/BloxHub/archive/refs/heads/main.zip" download><span data-i18n="dl3_btn">ZIP du dépôt</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fonctionnalites" style="background:var(--bg2)">
+  <div class="wrap">
+    <h2 class="sec-title" data-i18n="feat_title">Fonctionnalités</h2>
+    <p class="sec-sub" data-i18n="feat_sub">Une seule application pour tout ton Roblox communautaire.</p>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3 data-i18n="f1">Chat communautaire</h3>
+        <p data-i18n="f1d">Salons publics, messages privés, indicateur de saisie, présence en temps réel et historique persistant — façon Discord, auto-hébergé entre amis.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3"/><circle cx="4" cy="12" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="20" cy="14" r="2"/></svg></div>
+        <h3 data-i18n="f2">Éditeur de FastFlags</h3>
+        <p data-i18n="f2d">23 flags documentés (FR/EN) avec interrupteurs, 5 profils prêts (FPS Max, Équilibré, Qualité Max, Low Latency, Anti-Telemetry) et sauvegarde automatique.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        <h3 data-i18n="f3">Lanceur intégré</h3>
+        <p data-i18n="f3d">Lance Roblox en un clic via le protocole roblox://, rejoins directement une expérience par Place ID et surveille les sessions en cours.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></div>
+        <h3 data-i18n="f4">Profils Roblox</h3>
+        <p data-i18n="f4d">Consulte avatar, amis et profil via les API publiques Roblox. Tape juste un pseudo — l'app détecte l'installation automatiquement.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <h3 data-i18n="f5">Interface FR / EN</h3>
+        <p data-i18n="f5d">Bascule français ⇄ anglais en un clic depuis les paramètres. Thème sombre officiel inspiré de la palette Roblox (#E2231A).</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 8h.01M6 18h.01"/></svg></div>
+        <h3 data-i18n="f6">Serveur autonome</h3>
+        <p data-i18n="f6d">bloxhub-server.exe : un exécutable de 1 Mo à lancer sur ton PC ou un VPS. 5 salons par défaut, anti-spam intégré, historique sur disque.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="installation">
+  <div class="wrap">
+    <h2 class="sec-title" data-i18n="inst_title">Installation en 3 étapes</h2>
+    <p class="sec-sub" data-i18n="inst_sub">Moins d'une minute chrono.</p>
+    <div class="steps">
+      <div class="step">
+        <h3 data-i18n="s1">Télécharge</h3>
+        <p data-i18n="s1d">Clique sur le bouton de l'installateur ci-dessus. Le fichier BloxHub_0.1.0_x64-setup.exe arrive dans ton dossier Téléchargements.</p>
+      </div>
+      <div class="step">
+        <h3 data-i18n="s2">Lance l'assistant</h3>
+        <p data-i18n="s2d">Double-clique et suis l'assistant en français. Installation par utilisateur : aucun droit administrateur demandé.</p>
+      </div>
+      <div class="step">
+        <h3 data-i18n="s3">Ouvre BloxHub</h3>
+        <p data-i18n="s3d">Menu Démarrer → BloxHub. Configure ton pseudo, connecte-toi au serveur de chat et ajuste tes FastFlags si tu le souhaites.</p>
+      </div>
+    </div>
+    <div class="warn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4m0 4h.01"/></svg>
+      <p data-i18n="warn_ss">L'application n'étant pas signée numériquement, Windows SmartScreen peut afficher « Windows a protégé votre PC ». Clique sur <b>Informations complémentaires</b> puis <b>Exécuter quand même</b> — c'est normal pour un projet open source communautaire.</p>
+    </div>
+  </div>
+</section>
+
+<section id="serveur" style="background:var(--bg2)">
+  <div class="wrap">
+    <h2 class="sec-title" data-i18n="srv_title">Héberger le serveur de chat</h2>
+    <p class="sec-sub" data-i18n="srv_sub">La version portable inclut bloxhub-server.exe — ton propre serveur Discord-like.</p>
+    <div class="server-box">
+      <div>
+        <h3 data-i18n="srv_h3">Sur ton PC ou un VPS Windows</h3>
+        <p data-i18n="srv_p1">Lance l'exécutable, partage ton adresse IP avec tes amis, et c'est tout : salons, MP et historique fonctionnent en pair-à-pair local.</p>
+        <p data-i18n="srv_p2">Tes amis saisissent l'adresse dans BloxHub → Paramètres → Chat.</p>
+      </div>
+      <pre><span class="c"># Invite de commandes</span>
+bloxhub-server.exe
+
+<span class="c"># Port et dossier personnalisés</span>
+<span class="r">bloxhub-server.exe</span> --port 9000 --data ./data
+
+<span class="c"># Adresse à partager : ws://ton-ip:8787</span></pre>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <a href="https://github.com/Blue965/BloxHub" data-i18n="ft_repo">GitHub — Blue965/BloxHub</a>
+      <a href="https://github.com/Blue965/BloxHub/blob/main/LICENSE" data-i18n="ft_license">Licence MIT</a>
+    </div>
+    <p data-i18n="ft_note">Projet communautaire non officiel — non affilié à Roblox Corporation. © 2026 BloxHub</p>
+  </div>
+</footer>
+
+<script>
+/* ======== Bilingue FR / EN ======== */
+const I18N = {
+  en: {
+    nav_dl:"Download", nav_feat:"Features", nav_install:"Install", nav_server:"Server",
+    badge:"v0.1.0 — Windows 64-bit",
+    tagline:"The \"Discord for Roblox\": community chat with your friends, FastFlags editor, built-in launcher and Roblox profiles — all in a single app.",
+    cta_setup:"Download installer (.exe)", cta_portable:"Portable version (.zip)",
+    meta_note:'Installer 3 MB · Portable 7.4 MB · Windows 10/11 · <b>Free and open source (MIT)</b>',
+    dl_title:"Downloads", dl_sub:"Pick the version that suits you — everything is included, zero setup.",
+    tag_reco:"Recommended",
+    dl1_title:"Windows Installer", dl1_desc:"The classic wizard: installs BloxHub into your user profile, creates Start Menu and Desktop shortcuts. No administrator password required.",
+    dl1_btn:"Install",
+    dl2_title:"Portable version", dl2_desc:"No installation: unzip and double-click bloxhub.exe. Great for USB sticks. Also includes the bloxhub-server.exe chat server.",
+    dl2_btn:"Download .zip",
+    dl3_title:"Source code", dl3_desc:"The full Rust project (Tauri 2): core, WebSocket server, FR/EN UI and a detailed README to build it yourself.",
+    dl3_btn:"Repo ZIP",
+    feat_title:"Features", feat_sub:"One app for your whole Roblox community.",
+    f1:"Community chat", f1d:"Public channels, direct messages, typing indicator, real-time presence and persistent history — Discord-style, self-hosted among friends.",
+    f2:"FastFlags editor", f2d:"23 documented flags (FR/EN) with toggles, 5 ready-made presets (Max FPS, Balanced, Max Quality, Low Latency, Anti-Telemetry) and automatic backups.",
+    f3:"Built-in launcher", f3d:"Launch Roblox in one click via the roblox:// protocol, join experiences directly by Place ID and monitor running sessions.",
+    f4:"Roblox profiles", f4d:"View avatar, friends and profile through Roblox public APIs. Just type a username — the app auto-detects your installation.",
+    f5:"FR / EN interface", f5d:"Switch French ⇄ English in one click from settings. Official dark theme inspired by the Roblox palette (#E2231A).",
+    f6:"Standalone server", f6d:"bloxhub-server.exe: a 1 MB executable for your PC or VPS. 5 default channels, built-in anti-spam, on-disk history.",
+    inst_title:"Install in 3 steps", inst_sub:"Under a minute, start to finish.",
+    s1:"Download", s1d:"Click the installer button above. BloxHub_0.1.0_x64-setup.exe lands in your Downloads folder.",
+    s2:"Run the wizard", s2d:"Double-click and follow the assistant. Per-user install: no administrator rights asked.",
+    s3:"Open BloxHub", s3d:"Start Menu → BloxHub. Set your username, connect to the chat server and tweak your FastFlags if you want.",
+    warn_ss:'The app is not digitally signed, so Windows SmartScreen may show "Windows protected your PC". Click <b>More info</b> then <b>Run anyway</b> — normal for a community open-source project.',
+    srv_title:"Host the chat server", srv_sub:"The portable version includes bloxhub-server.exe — your own Discord-like server.",
+    srv_h3:"On your PC or a Windows VPS", srv_p1:"Run the executable, share your IP address with your friends, and you're done: channels, DMs and history work locally.",
+    srv_p2:"Friends enter the address in BloxHub → Settings → Chat.",
+    ft_repo:"GitHub — Blue965/BloxHub", ft_license:"MIT License",
+    ft_note:"Unofficial community project — not affiliated with Roblox Corporation. © 2026 BloxHub"
+  }
+};
+let lang = "fr";
+const FR = {};
+document.querySelectorAll("[data-i18n]").forEach(el => FR[el.dataset.i18n] = el.innerHTML);
+function toggleLang(){
+  lang = (lang === "fr") ? "en" : "fr";
+  document.documentElement.lang = lang;
+  document.getElementById("langBtn").textContent = lang === "fr" ? "EN" : "FR";
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    el.innerHTML = lang === "fr" ? FR[el.dataset.i18n] : I18N.en[el.dataset.i18n] ?? el.innerHTML;
+  });
+}
+</script>
+</body>
+</html>

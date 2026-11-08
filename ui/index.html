@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BloxHub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" data-view="home">
+
+    <!-- ══════════ Rail de navigation ══════════ -->
+    <nav id="rail">
+      <div class="logo" title="BloxHub"><span>B</span></div>
+      <button class="rail-btn active" data-view="home" data-i18n-title="nav.home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h5v-6h4v6h5V9.5"/></svg>
+        <span class="rail-label" data-i18n="nav.home">Accueil</span>
+      </button>
+      <button class="rail-btn" data-view="chat" data-i18n-title="nav.chat">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 3 6.6 3 11c0 2.2 1 4.1 2.6 5.6-.2 1.2-.8 2.4-1.8 3.2-.2.2 0 .5.2.5 1.9-.1 3.5-.8 4.6-1.6 1 .3 2.2.5 3.4.5 5 0 9-3.6 9-8.2S17 3 12 3z"/></svg>
+        <span class="rail-label" data-i18n="nav.chat">Chat</span>
+        <span id="rail-chat-dot" class="rail-dot hidden"></span>
+      </button>
+      <button class="rail-btn" data-view="fflags" data-i18n-title="nav.fflags">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4.5 13.5H10L9 22l8.5-11.5H12L13 2z"/></svg>
+        <span class="rail-label" data-i18n="nav.fflags">FastFlags</span>
+      </button>
+      <button class="rail-btn" data-view="profile" data-i18n-title="nav.profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.8-3.6 3.9-5.5 7.5-5.5s6.7 1.9 7.5 5.5"/></svg>
+        <span class="rail-label" data-i18n="nav.profile">Profil</span>
+      </button>
+      <div class="rail-spacer"></div>
+      <button class="rail-btn" data-view="settings" data-i18n-title="nav.settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.8 7.8 0 0 0 .1-2l2-1.5-2-3.5-2.4 1a7.8 7.8 0 0 0-1.7-1L15 3h-4l-.3 2.6a7.8 7.8 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7.8 7.8 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7.8 7.8 0 0 0 1.7 1L9 21h4l.3-2.6a7.8 7.8 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5z"/></svg>
+        <span class="rail-label" data-i18n="nav.settings">Paramètres</span>
+      </button>
+    </nav>
+
+    <!-- ══════════ Panneau contextuel (salons du chat) ══════════ -->
+    <aside id="sidepanel">
+      <div class="sidepanel-header">
+        <span class="sidepanel-title">BloxHub <b class="red">Chat</b></span>
+        <span id="chat-conn-badge" class="conn-badge off" data-i18n="chat.offline">Hors-ligne</span>
+      </div>
+      <div class="sidepanel-scroll">
+        <div class="sidepanel-section" data-i18n="chat.channels">Salons</div>
+        <div id="channel-list"></div>
+        <div class="sidepanel-section" data-i18n="chat.dms">Messages privés</div>
+        <div id="dm-list"></div>
+      </div>
+    </aside>
+
+    <!-- ══════════ Contenu principal ══════════ -->
+    <main id="main">
+
+      <!-- ── Vue Accueil ── -->
+      <section id="view-home" class="view">
+        <div class="home-hero card">
+          <div class="hero-text">
+            <h1>Blox<span class="red">Hub</span></h1>
+            <p class="tagline" data-i18n="home.tagline">Ta communauté Roblox : chat, FastFlags, lanceur et profils — tout au même endroit.</p>
+            <div class="hero-actions">
+              <button id="btn-launch" class="btn btn-primary btn-big">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M8 5v14l11-7z"/></svg>
+                <span data-i18n="home.launch">LANCER ROBLOX</span>
+              </button>
+              <form id="join-form" class="join-row">
+                <input id="place-id" type="number" min="1" data-i18n-ph="home.join_ph" placeholder="Place ID…" />
+                <button type="submit" class="btn" data-i18n="home.join_btn">Rejoindre</button>
+              </form>
+            </div>
+          </div>
+          <div class="hero-logo" aria-hidden="true"><div class="hero-tile"><span>B</span></div></div>
+        </div>
+
+        <div class="home-grid">
+          <div class="card" id="roblox-status-card">
+            <h3 data-i18n="home.status_title">État de Roblox</h3>
+            <div id="roblox-status-body" class="status-body"></div>
+            <button id="btn-manage-flags" class="btn btn-ghost full" data-i18n="home.manage_flags">Gérer les FastFlags</button>
+          </div>
+          <div class="card" id="home-chat-card">
+            <h3 data-i18n="home.chat_card_title">Chat communautaire</h3>
+            <div id="home-chat-body" class="status-body"></div>
+            <button id="btn-go-chat" class="btn btn-primary full" data-i18n="home.open_chat">Ouvrir le chat</button>
+          </div>
+          <div class="card tips">
+            <h3 data-i18n="home.tips_title">Bon à savoir</h3>
+            <p data-i18n="home.tips_body">Les FastFlags modifient le client Roblox : gagne des FPS, change de moteur de rendu, coupe la télémétrie… Applique un preset puis relance Roblox pour que ça prenne effet.</p>
+            <p data-i18n="home.tips_body2">Pour inviter tes amis au chat : lance le serveur BloxHub sur ton PC et partage l'adresse ws://ton-ip:8787 (voir README).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Vue Chat ── -->
+      <section id="view-chat" class="view hidden chat-layout">
+        <div id="chat-main">
+          <header id="chat-header">
+            <h2 id="chat-room-title">#general</h2>
+            <span id="chat-conn-badge2" class="conn-badge off" data-i18n="chat.offline">Hors-ligne</span>
+          </header>
+          <div id="messages"></div>
+          <div id="typing-bar" class="hidden"></div>
+          <form id="chat-form">
+            <input id="chat-input" autocomplete="off" data-i18n-ph="chat.input_ph" placeholder="Écrire un message…" />
+            <button type="submit" class="btn btn-primary" data-i18n="chat.send">Envoyer</button>
+          </form>
+        </div>
+        <aside id="members-panel">
+          <h3><span data-i18n="chat.members">Membres</span> <span id="members-count" class="badge">0</span></h3>
+          <div id="members-list"></div>
+        </aside>
+      </section>
+
+      <!-- ── Vue FastFlags ── -->
+      <section id="view-fflags" class="view hidden">
+        <header class="view-header">
+          <div>
+            <h2 data-i18n="ff.title">Éditeur de FastFlags</h2>
+            <div id="ff-file-line" class="subtle"></div>
+          </div>
+          <div class="header-actions">
+            <span id="ff-dirty-badge" class="badge warn hidden" data-i18n="ff.dirty">Non appliqué</span>
+            <span id="ff-count-badge" class="badge">0</span>
+            <button id="ff-import" class="btn btn-ghost" data-i18n="ff.import">Importer</button>
+            <button id="ff-export" class="btn btn-ghost" data-i18n="ff.export">Exporter</button>
+            <button id="ff-reset" class="btn btn-danger-ghost" data-i18n="ff.reset">Tout retirer</button>
+            <button id="ff-apply" class="btn btn-primary" data-i18n="ff.apply">Appliquer</button>
+          </div>
+        </header>
+        <div class="ff-disclaimer" data-i18n="ff.disclaimer"></div>
+        <input id="ff-import-file" type="file" accept=".json,application/json" class="hidden" />
+
+        <div class="ff-tabs">
+          <button class="tab active" data-tab="catalog" data-i18n="ff.tab_catalog">Catalogue</button>
+          <button class="tab" data-tab="presets" data-i18n="ff.tab_presets">Presets</button>
+          <button class="tab" data-tab="advanced" data-i18n="ff.tab_advanced">Avancé</button>
+        </div>
+
+        <div id="ff-panel-catalog" class="ff-panel">
+          <div class="ff-toolbar">
+            <input id="ff-search" data-i18n-ph="ff.search_ph" placeholder="Rechercher un flag…" />
+            <div id="ff-cats" class="chips"></div>
+          </div>
+          <div id="ff-catalog-list" class="catalog-grid"></div>
+        </div>
+
+        <div id="ff-panel-presets" class="ff-panel hidden">
+          <div id="preset-grid" class="preset-grid"></div>
+        </div>
+
+        <div id="ff-panel-advanced" class="ff-panel hidden">
+          <div class="adv-toolbar">
+            <span class="subtle" data-i18n="ff.adv_hint">Clé exacte du flag → valeur (booléen, nombre ou texte).</span>
+            <button id="ff-add-row" class="btn" data-i18n="ff.add_flag">+ Ajouter un flag</button>
+          </div>
+          <table id="ff-adv-table">
+            <thead><tr><th data-i18n="ff.col_key">Clé</th><th data-i18n="ff.col_value">Valeur</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Vue Profil ── -->
+      <section id="view-profile" class="view hidden">
+        <header class="view-header">
+          <h2 data-i18n="prof.title">Profil Roblox</h2>
+        </header>
+        <form id="profile-form" class="prof-search">
+          <input id="profile-username" data-i18n-ph="prof.search_ph" placeholder="Nom d'utilisateur Roblox…" />
+          <button type="submit" class="btn btn-primary" data-i18n="prof.search">Rechercher</button>
+        </form>
+        <div id="profile-result"></div>
+      </section>
+
+      <!-- ── Vue Paramètres ── -->
+      <section id="view-settings" class="view hidden">
+        <header class="view-header">
+          <h2 data-i18n="set.title">Paramètres</h2>
+        </header>
+        <div class="settings-grid">
+          <div class="card">
+            <h3 data-i18n="set.language">Langue</h3>
+            <div class="lang-row">
+              <label class="lang-opt"><input type="radio" name="lang" value="fr" /><span>Français</span></label>
+              <label class="lang-opt"><input type="radio" name="lang" value="en" /><span>English</span></label>
+            </div>
+          </div>
+          <div class="card">
+            <h3 data-i18n="set.chat_title">Chat</h3>
+            <label class="field" data-i18n="set.chat_url">Adresse du serveur</label>
+            <input id="set-chat-url" spellcheck="false" />
+            <label class="field" data-i18n="set.chat_username">Ton pseudo</label>
+            <input id="set-chat-username" maxlength="24" />
+            <label class="check"><input id="set-autoconnect" type="checkbox" /><span data-i18n="set.autoconnect">Connexion auto au démarrage</span></label>
+          </div>
+          <div class="card">
+            <h3 data-i18n="set.roblox_title">Roblox</h3>
+            <label class="field" data-i18n="set.custom_path">Chemin personnalisé (optionnel)</label>
+            <input id="set-custom-path" spellcheck="false" data-i18n-ph="set.custom_ph" placeholder="…/RobloxPlayerBeta.exe" />
+            <p class="subtle" data-i18n="set.custom_hint">Laisse vide si Roblox est installé normalement (Windows/macOS). Sous Linux/Wine, pointe vers le dossier du player.</p>
+          </div>
+          <div class="card about">
+            <h3 data-i18n="set.about_title">À propos</h3>
+            <p data-i18n="set.about">BloxHub v0.1.0 — app communautaire non officielle en Rust + Tauri 2. Ni affiliée à, ni approuvée par Roblox Corporation.</p>
+          </div>
+        </div>
+        <button id="set-save" class="btn btn-primary" data-i18n="set.save">Enregistrer</button>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modale de confirmation -->
+  <div id="modal-backdrop" class="hidden">
+    <div class="modal">
+      <p id="modal-text"></p>
+      <div class="modal-actions">
+        <button id="modal-cancel" class="btn btn-ghost" data-i18n="common.cancel">Annuler</button>
+        <button id="modal-ok" class="btn btn-primary" data-i18n="common.confirm">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
